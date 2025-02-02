@@ -8,6 +8,7 @@ import {
 	MenuItem,
 	Typography,
 } from "@mui/material";
+import { func } from "prop-types";
 import React, { useState } from "react";
 
 const PASSENGERS = [
@@ -16,14 +17,18 @@ const PASSENGERS = [
 	{ label: "Infants", subLabel: "Under 2", key: "infants" },
 ];
 
-const AddPassengers = () => {
+const AddPassengers = ({ onChange }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [passengers, setPassengers] = useState({
 		adults: 1,
 		children: 0,
-		infantsSeat: 0,
-		infantsLap: 0,
+		infants: 0,
 	});
+
+	const totalPassenegers = Object.values(passengers).reduce(
+		(total, count) => total + count,
+		0
+	);
 
 	const handleClose = () => {
 		setAnchorEl(null);
@@ -31,10 +36,15 @@ const AddPassengers = () => {
 
 	const handleIncrement = (type) => {
 		setPassengers((prev) => ({ ...prev, [type]: prev[type] + 1 }));
+		onChange((prev) => ({ ...prev, [type]: prev[type] + 1 }));
 	};
 
 	const handleDecrement = (type) => {
 		setPassengers((prev) => ({
+			...prev,
+			[type]: Math.max(0, prev[type] - 1),
+		}));
+		onChange((prev) => ({
 			...prev,
 			[type]: Math.max(0, prev[type] - 1),
 		}));
@@ -44,11 +54,11 @@ const AddPassengers = () => {
 		<>
 			<Button
 				variant="outlined"
-				startIcon={<Person />}
-				onClick={() => setAnchorEl(event.currentTarget)}
-				sx={{ textTransform: "none" }}
+				onClick={(event) => setAnchorEl(event.currentTarget)}
+				sx={{ textTransform: "none", gap: 1 }}
 			>
-				Passengers
+				<Person />
+				{totalPassenegers}
 			</Button>
 			<Menu
 				anchorEl={anchorEl}
@@ -128,6 +138,10 @@ const AddPassengers = () => {
 			</Menu>
 		</>
 	);
+};
+
+AddPassengers.propTypes = {
+	onChange: func.isRequired,
 };
 
 export default AddPassengers;
