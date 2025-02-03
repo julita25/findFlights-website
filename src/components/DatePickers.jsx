@@ -27,11 +27,25 @@ const DatePickers = ({ onChange }) => {
 					label="Start Date"
 					value={startDate}
 					onChange={handleStartDateChange}
+					sx={{
+						"&.MuiPickersDay-root": {
+							color: "white !important",
+						},
+					}}
 					slotProps={{
+						layout: {
+							sx: {
+								backgroundColor: "#424242",
+								color: "white",
+							},
+						},
 						textField: {
 							sx: {
 								input: {
 									color: "#fff !important",
+								},
+								label: {
+									color: "#A0A0A0",
 								},
 								borderRadius: "2px",
 								backgroundColor: "#424242",
@@ -51,6 +65,9 @@ const DatePickers = ({ onChange }) => {
 							sx: {
 								input: {
 									color: "#fff !important",
+								},
+								label: {
+									color: "#A0A0A0",
 								},
 								borderRadius: "2px",
 								backgroundColor: "#424242",
