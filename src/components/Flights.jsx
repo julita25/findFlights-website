@@ -1252,16 +1252,23 @@ const Flights = ({ data }) => {
 				</Box>
 			</AccordionSummary>
 			<AccordionDetails>
-				{item.legs.map((item) => (
-					<Box key={item.id}>
-						<Box sx={{ display: "flex", gap: 4, paddingLeft: 2 }}>
+				{item.legs.map((it, index) => (
+					<Box key={it.id}>
+						<Box
+							sx={{
+								display: "flex",
+								gap: 4,
+								paddingLeft: 2,
+								justifyContent: "center",
+							}}
+						>
 							<Box sx={{ display: "flex", gap: 2 }}>
 								<Box>
-									<img src={item.carriers.marketing[0].logoUrl} width={"50px"} />
+									<img src={it.carriers.marketing[0].logoUrl} width={"50px"} />
 								</Box>
 								<Box>
-									<Typography> {dayjs(item.departure).format("h:mm A")}</Typography>
-									<Typography>{item.origin.id}</Typography>
+									<Typography> {dayjs(it.departure).format("h:mm A")}</Typography>
+									<Typography>{it.origin.id}</Typography>
 								</Box>
 							</Box>
 							<Box
@@ -1275,7 +1282,7 @@ const Flights = ({ data }) => {
 								}}
 							>
 								<Typography variant="body2" color="text.secondary">
-									{formatTravelDuration(item.durationInMinutes)}
+									{formatTravelDuration(it.durationInMinutes)}
 								</Typography>
 								<Box display={"flex"} sx={{ alignItems: "center", gap: 1 }}>
 									<Divider sx={{ width: "100px", borderColor: "grey.400" }} />
@@ -1284,18 +1291,18 @@ const Flights = ({ data }) => {
 									/>
 								</Box>
 								<Typography variant="body2" color="primary">
-									{item.stopCount >= 1
-										? `${item.stopCount} stop ${formatFlightStops(item.segments)}`
+									{it.stopCount >= 1
+										? `${it.stopCount} stop ${formatFlightStops(it.segments)}`
 										: "Direct"}
 								</Typography>
 							</Box>
 							<Box>
-								<Typography>{dayjs(item.arrival).format("h:mm A")}</Typography>
-								<Typography>{item.destination.id}</Typography>
+								<Typography>{dayjs(it.arrival).format("h:mm A")}</Typography>
+								<Typography>{it.destination.id}</Typography>
 							</Box>
 						</Box>
 
-						<Divider sx={{ my: 2, width: "500px" }} />
+						{item.legs.length - 1 !== index && <Divider sx={{ my: 2 }} />}
 					</Box>
 				))}
 			</AccordionDetails>
