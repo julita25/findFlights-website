@@ -5,8 +5,8 @@ const API_URL = "https://sky-scrapper.p.rapidapi.com";
 
 const headers = {
 	"x-rapidapi-host": "sky-scrapper.p.rapidapi.com",
-	"x-rapidapi-key": "060ff29326msh7cacb95f34d143ep165794jsn365ebe8059fb",
-	"Content-Type": "application/json", // You can add other headers if needed
+	"x-rapidapi-key": "dde203d021msh403295d33d29fb2p13cd8bjsn531d413b5156",
+	"Content-Type": "application/json", //
 };
 
 // Fetch airports based on city or place name
