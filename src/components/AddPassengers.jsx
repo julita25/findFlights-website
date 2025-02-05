@@ -10,12 +10,7 @@ import {
 } from "@mui/material";
 import { func } from "prop-types";
 import React, { useState } from "react";
-
-const PASSENGERS = [
-	{ label: "Adultos", subLabel: "Age 18+", key: "adults" },
-	{ label: "Children", subLabel: "Age 2-17", key: "children" },
-	{ label: "Infants", subLabel: "Under 2", key: "infants" },
-];
+import { PASSENGERS } from "../constants";
 
 const AddPassengers = ({ onChange }) => {
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -64,13 +59,15 @@ const AddPassengers = ({ onChange }) => {
 				anchorEl={anchorEl}
 				open={Boolean(anchorEl)}
 				onClose={handleClose}
-				PaperProps={{
-					sx: {
-						padding: "10px",
-						backgroundColor: "#2d2d2d",
-						color: "white",
-						borderRadius: "8px",
-						width: "250px",
+				slotProps={{
+					paper: {
+						sx: {
+							padding: "10px",
+							backgroundColor: "#2d2d2d",
+							color: "white",
+							borderRadius: "8px",
+							width: "250px",
+						},
 					},
 				}}
 			>
@@ -94,7 +91,6 @@ const AddPassengers = ({ onChange }) => {
 								</Typography>
 							)}
 						</Box>
-
 						<Box display="flex" alignItems="center" gap={1}>
 							<IconButton
 								size="small"
@@ -107,9 +103,7 @@ const AddPassengers = ({ onChange }) => {
 							>
 								<Remove fontSize="small" />
 							</IconButton>
-
 							<Typography>{passengers[item.key]}</Typography>
-
 							<IconButton
 								size="small"
 								onClick={() => handleIncrement(item.key)}
@@ -124,13 +118,8 @@ const AddPassengers = ({ onChange }) => {
 						</Box>
 					</MenuItem>
 				))}
-
 				<Divider sx={{ my: 1, borderColor: "#444" }} />
-
-				<Box display="flex" justifyContent="space-between" px={2}>
-					<Button onClick={handleClose} sx={{ color: "#90caf9" }}>
-						Cancel
-					</Button>
+				<Box display="flex" justifyContent="flex-end" px={2}>
 					<Button onClick={handleClose} sx={{ color: "#90caf9" }}>
 						Done
 					</Button>

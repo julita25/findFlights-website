@@ -32,26 +32,6 @@ export const searchAirports = async (query) => {
 	}
 };
 
-// Fetch nearby airports based on latitude and longitude
-export const getNearbyAirports = async (lat, lng) => {
-	try {
-		const response = await fetch(
-			`${API_URL}/api/v1/flights/getNearByAirports?lat=${lat}&lng=${lng}`,
-			{
-				method: "GET",
-				headers: headers,
-			}
-		);
-		if (!response.ok) {
-			throw new Error("Failed to fetch nearby airports");
-		}
-		const data = await response.json().data;
-		return data;
-	} catch (error) {
-		return null;
-	}
-};
-
 // Search for flights based on origin and destination
 export const searchFlights = async (params) => {
 	try {
@@ -68,7 +48,7 @@ export const searchFlights = async (params) => {
 		const data = await response.json();
 		return data;
 	} catch (error) {
-		failureToast(`Error fetching flights ${error}`);
+		failureToast(error);
 		return null;
 	}
 };
