@@ -71,7 +71,7 @@ const FlightHomePage = () => {
 
 	const handleTravelDateChange = (key, val) => {
 		const updatedForm = { ...formValue };
-		if (key == "start") {
+		if (key === "start") {
 			updatedForm["date"] = val;
 			setFormValue(updatedForm);
 		} else {
@@ -248,7 +248,7 @@ const FlightHomePage = () => {
 						<Typography sx={{ fontSize: "20px" }}>
 							Start searching and get the best flights...
 						</Typography>
-						<img src={"travel2.png"} style={{ width: "350px" }} />
+						<img src={"travel2.png"} style={{ width: "350px" }} alt="travel" />
 					</Box>
 				) : (
 					<FlightResults
