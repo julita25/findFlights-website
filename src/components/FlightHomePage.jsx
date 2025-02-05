@@ -18,21 +18,22 @@ import FlightSearchTextField from "./FlightSearchTextField";
 import { CABIN_CLASS, TRAVEL_TYPE } from "../constants";
 import { failureToast } from "../utils";
 
+const initialFormValue = {
+	originSkyId: "",
+	originEntityId: "",
+	destinationSkyId: "",
+	destinationEntityId: "",
+	date: null,
+	returnDate: null,
+	cabinClass: "economy",
+	adults: 1,
+	childrens: 0,
+	infants: 0,
+	sortBy: "best",
+	travelType: "roundTrip",
+};
+
 const FlightHomePage = () => {
-	const initialFormValue = {
-		originSkyId: "",
-		originEntityId: "",
-		destinationSkyId: "",
-		destinationEntityId: "",
-		date: null,
-		returnDate: null,
-		cabinClass: "economy",
-		adults: 1,
-		childrens: 0,
-		infants: 0,
-		sortBy: "best",
-		travelType: "roundTrip",
-	};
 	const [formValue, setFormValue] = useState({ ...initialFormValue });
 	const [options, setOptions] = useState([]);
 	const [flights, setFlights] = useState({});
@@ -157,8 +158,6 @@ const FlightHomePage = () => {
 			setIsLoading(false);
 		}, [500]);
 	};
-
-	console.log("loading", formValue);
 
 	return (
 		<>
