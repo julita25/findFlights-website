@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { failureToast } from "./utils";
 
 // Base URL for the API
