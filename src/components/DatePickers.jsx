@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import dayjs from "dayjs";
 import { func } from "prop-types";
 
@@ -19,26 +19,23 @@ const DatePickers = ({ onChange }) => {
 			setEndDate(null);
 		}
 	};
-
+	const isSMScreen = useMediaQuery((theme) => theme.breakpoints.down("lg"));
+	const isXSScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 	return (
 		<LocalizationProvider dateAdapter={AdapterDayjs}>
-			<Box sx={{ display: "flex", gap: 2, justifyContent: "center", p: 2 }}>
+			<Box
+				sx={{
+					display: "flex",
+					gap: 2,
+					width: "100%",
+					...(isXSScreen && { width: "100%", flexWrap: "wrap" }),
+				}}
+			>
 				<DatePicker
 					label="Start Date"
 					value={startDate}
 					onChange={handleStartDateChange}
-					sx={{
-						"&.MuiPickersDay-root": {
-							color: "white !important",
-						},
-					}}
 					slotProps={{
-						layout: {
-							sx: {
-								backgroundColor: "#424242",
-								color: "white",
-							},
-						},
 						textField: {
 							sx: {
 								input: {
@@ -46,9 +43,15 @@ const DatePickers = ({ onChange }) => {
 								},
 								label: {
 									color: "#A0A0A0",
+									fontSize: "18px",
 								},
-								borderRadius: "2px",
+								"& .MuiSvgIcon-root": { color: "#A0A0A0" },
+								borderRadius: 1,
 								backgroundColor: "#424242",
+								flex: 1,
+								minWidth: isSMScreen ? "49%" : "150px", // Responsive minWidth
+								maxWidth: "100%", // Prevents overflow
+								width: "150px",
 							},
 						},
 					}}
@@ -68,9 +71,15 @@ const DatePickers = ({ onChange }) => {
 								},
 								label: {
 									color: "#A0A0A0",
+									fontSize: "18px",
 								},
-								borderRadius: "2px",
+								"& .MuiSvgIcon-root": { color: "#A0A0A0" },
+								borderRadius: 1,
 								backgroundColor: "#424242",
+								flex: 1,
+								minWidth: isSMScreen ? "49%" : "150px", // Responsive minWidth
+								maxWidth: "100%", // Prevents overflow
+								width: "150px",
 							},
 						},
 					}}

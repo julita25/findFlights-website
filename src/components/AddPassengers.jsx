@@ -63,8 +63,7 @@ const AddPassengers = ({ onChange }) => {
 					paper: {
 						sx: {
 							padding: "10px",
-							backgroundColor: "#2d2d2d",
-							color: "white",
+							backgroundColor: "#fff",
 							borderRadius: "8px",
 							width: "250px",
 						},
@@ -120,7 +119,7 @@ const AddPassengers = ({ onChange }) => {
 				))}
 				<Divider sx={{ my: 1, borderColor: "#444" }} />
 				<Box display="flex" justifyContent="flex-end" px={2}>
-					<Button onClick={handleClose} sx={{ color: "#90caf9" }}>
+					<Button onClick={handleClose} variant="contained">
 						Done
 					</Button>
 				</Box>

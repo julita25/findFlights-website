@@ -3,7 +3,6 @@ import { searchAirports, searchFlights } from "../api";
 import {
 	Box,
 	Button,
-	Divider,
 	MenuItem,
 	Select,
 	Typography,
@@ -67,7 +66,7 @@ const FlightHomePage = () => {
 			}
 		}, 200);
 
-		return () => clearTimeout(timer); // Clear the timer if user types again
+		return () => clearTimeout(timer);
 	};
 
 	const handleTravelDateChange = (key, val) => {
@@ -128,10 +127,10 @@ const FlightHomePage = () => {
 					gap: 1,
 					backgroundColor: "#2E2E2E",
 					padding: 2,
-					paddingTop: 3,
+					paddingTop: 5,
 				}}
 			>
-				<Typography sx={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
+				<Typography sx={{ fontSize: "42px", fontWeight: 700, color: "white" }}>
 					Flights
 				</Typography>
 				<Box
@@ -149,7 +148,6 @@ const FlightHomePage = () => {
 						}),
 					}}
 				>
-					{/* Departure Location */}
 					<Box
 						sx={{
 							display: "flex",
@@ -159,6 +157,7 @@ const FlightHomePage = () => {
 						}}
 					>
 						<FlightSearchTextField
+							placeholder={"Enter origin"}
 							options={options}
 							onSelect={(value) => {
 								const updatedForm = { ...formValue };
@@ -168,8 +167,8 @@ const FlightHomePage = () => {
 							}}
 							onChangeInput={handleSearchAirports}
 						/>
-						{/* Destination Input */}
 						<FlightSearchTextField
+							placeholder={"Enter destination"}
 							options={options}
 							onSelect={(value) => {
 								const updatedForm = { ...formValue };
@@ -203,25 +202,23 @@ const FlightHomePage = () => {
 									color: "white",
 									backgroundColor: "#424242",
 									borderRadius: 1,
+									fontSize: "18px",
 									width: "150px",
+									padding: "8px 10px",
 								}}
 							>
-								{CABIN_CLASS?.map((item, index) => (
-									<>
-										<MenuItem key={item.value} value={item.value}>
-											{item.label}
-										</MenuItem>
-										{CABIN_CLASS.length - 1 !== index && <Divider />}
-									</>
+								{CABIN_CLASS?.map((item) => (
+									<MenuItem key={item.value} value={item.value}>
+										{item.label}
+									</MenuItem>
 								))}
 							</Select>
 							<AddPassengers onChange={setPassengers} />
 						</Box>
-						{/* Search Button */}
 						<Button
 							variant="contained"
 							color="primary"
-							sx={{ borderRadius: 1 }}
+							sx={{ borderRadius: 1, padding: "14px 14px" }}
 							startIcon={<Search />}
 							onClick={handleSubmit}
 						>

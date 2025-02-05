@@ -15,7 +15,31 @@ function App() {
 				xl: 1926,
 			},
 		},
+		components: {
+			MuiPickersDay: {
+				styleOverrides: {
+					root: {
+						fontSize: "15px",
+					},
+				},
+			},
+			MuiDayCalendar: {
+				styleOverrides: {
+					weekDayLabel: {
+						fontSize: "16px",
+					},
+				},
+			},
+			MuiPickersCalendarHeader: {
+				styleOverrides: {
+					label: {
+						fontSize: "20px",
+					},
+				},
+			},
+		},
 	});
+
 	return (
 		<ThemeProvider theme={theme}>
 			<div className="App">
