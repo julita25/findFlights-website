@@ -47,7 +47,7 @@ const FlightResults = ({ data, isLoading, failed, placeholderImg }) => {
 					gap: 2,
 				}}
 			>
-				<img src={placeholderImg} style={{ width: "70%" }} />
+				<img src={placeholderImg} style={{ width: "70%" }} alt="no results" />
 				<Typography sx={{ fontSize: "28px", fontWeight: 500 }}>
 					Ups...no results are showing, please try again
 				</Typography>
@@ -95,7 +95,11 @@ const FlightResults = ({ data, isLoading, failed, placeholderImg }) => {
 						>
 							<Box sx={{ display: "flex", gap: 2 }}>
 								<Box>
-									<img src={it.carriers.marketing[0].logoUrl} width={"50px"} />
+									<img
+										src={it.carriers.marketing[0].logoUrl}
+										width={"50px"}
+										alt={"airline"}
+									/>
 								</Box>
 								<Box>
 									<Typography> {dayjs(it.departure).format("h:mm A")}</Typography>

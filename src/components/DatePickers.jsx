@@ -4,9 +4,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Box, useMediaQuery } from "@mui/material";
 import dayjs from "dayjs";
-import { func } from "prop-types";
+import { bool, func } from "prop-types";
 
-const DatePickers = ({ onChange }) => {
+const DatePickers = ({ onChange, isOneWay }) => {
 	const [startDate, setStartDate] = useState(null);
 	const [endDate, setEndDate] = useState(null);
 
@@ -56,37 +56,39 @@ const DatePickers = ({ onChange }) => {
 						},
 					}}
 				/>
-				<DatePicker
-					label="End Date"
-					value={endDate}
-					onChange={(val) => {
-						setEndDate(val);
-						onChange("end", val);
-					}}
-					slotProps={{
-						textField: {
-							sx: {
-								input: {
-									color: "#fff !important",
+				{!isOneWay && (
+					<DatePicker
+						label="End Date"
+						value={endDate}
+						onChange={(val) => {
+							setEndDate(val);
+							onChange("end", val);
+						}}
+						slotProps={{
+							textField: {
+								sx: {
+									input: {
+										color: "#fff !important",
+									},
+									label: {
+										color: "#A0A0A0",
+										fontSize: "18px",
+									},
+									"& .MuiSvgIcon-root": { color: "#A0A0A0" },
+									borderRadius: 1,
+									backgroundColor: "#424242",
+									flex: 1,
+									minWidth: isSMScreen ? "49%" : "150px", // Responsive minWidth
+									maxWidth: "100%", // Prevents overflow
+									width: "150px",
 								},
-								label: {
-									color: "#A0A0A0",
-									fontSize: "18px",
-								},
-								"& .MuiSvgIcon-root": { color: "#A0A0A0" },
-								borderRadius: 1,
-								backgroundColor: "#424242",
-								flex: 1,
-								minWidth: isSMScreen ? "49%" : "150px", // Responsive minWidth
-								maxWidth: "100%", // Prevents overflow
-								width: "150px",
 							},
-						},
-					}}
-					shouldDisableDate={(date) =>
-						startDate && dayjs(date).isBefore(dayjs(startDate))
-					}
-				/>
+						}}
+						shouldDisableDate={(date) =>
+							startDate && dayjs(date).isBefore(dayjs(startDate))
+						}
+					/>
+				)}
 			</Box>
 		</LocalizationProvider>
 	);
@@ -94,6 +96,7 @@ const DatePickers = ({ onChange }) => {
 
 DatePickers.propTypes = {
 	onChange: func.isRequired,
+	isOneWay: bool.isRequired,
 };
 
 export default DatePickers;

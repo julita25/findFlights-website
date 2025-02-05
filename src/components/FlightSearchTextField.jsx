@@ -1,12 +1,6 @@
 import React from "react";
 import { Place } from "@mui/icons-material";
-import {
-	Autocomplete,
-	Box,
-	TextField,
-	Typography,
-	useMediaQuery,
-} from "@mui/material";
+import { Autocomplete, Box, TextField, Typography } from "@mui/material";
 import { func, instanceOf, string } from "prop-types";
 
 const FlightSearchTextField = ({
@@ -15,7 +9,6 @@ const FlightSearchTextField = ({
 	options,
 	placeholder,
 }) => {
-	const isSMScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 	return (
 		<Autocomplete
 			sx={{ width: "100%" }}
@@ -34,11 +27,10 @@ const FlightSearchTextField = ({
 					placeholder={placeholder}
 					size="small"
 					sx={{
-						//...(isSMScreen && { minWidth: "50%" }),
 						flex: 1,
-						minWidth: isSMScreen ? "100%" : "400px", // Responsive minWidth
+						minWidth: "100%", // Responsive minWidth
 						maxWidth: "100%", // Prevents overflow
-						display: "flex",
+						//	display: "flex",
 						width: "250px",
 						backgroundColor: "#424242",
 						borderRadius: 1,

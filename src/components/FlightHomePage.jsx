@@ -15,27 +15,27 @@ import dayjs from "dayjs";
 import FlightResults from "./FlightResults";
 import FlightOptionsToggle from "./FlightOptionsToggle";
 import FlightSearchTextField from "./FlightSearchTextField";
-import { CABIN_CLASS } from "../constants";
-
-const initialFormValue = {
-	originSkyId: "",
-	originEntityId: "",
-	destinationSkyId: "",
-	destinationEntityId: "",
-	date: null,
-	returnDate: null,
-	cabinClass: "economy",
-	adults: 1,
-	childrens: 0,
-	infants: 0,
-	sortBy: "best",
-};
+import { CABIN_CLASS, TRAVEL_TYPE } from "../constants";
+import { failureToast } from "../utils";
 
 const FlightHomePage = () => {
+	const initialFormValue = {
+		originSkyId: "",
+		originEntityId: "",
+		destinationSkyId: "",
+		destinationEntityId: "",
+		date: null,
+		returnDate: null,
+		cabinClass: "economy",
+		adults: 1,
+		childrens: 0,
+		infants: 0,
+		sortBy: "best",
+		travelType: "roundTrip",
+	};
 	const [formValue, setFormValue] = useState({ ...initialFormValue });
 	const [options, setOptions] = useState([]);
 	const [flights, setFlights] = useState({});
-	const [cabinClass, setCabinClass] = useState("economy");
 	const [isLoading, setIsLoading] = useState(false);
 	const [initState, setInitState] = useState(true);
 	const [errorPlaceholder, setErrorPlaceholder] = useState("");
@@ -49,7 +49,10 @@ const FlightHomePage = () => {
 	const isXSScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
 	const handleSearchAirports = (val) => {
-		if (val.length === 0) setOptions([]);
+		if (val.length === 0) {
+			setOptions([]);
+			return;
+		}
 		const timer = setTimeout(async () => {
 			try {
 				const res = await searchAirports(val); // API call
@@ -80,31 +83,70 @@ const FlightHomePage = () => {
 		}
 	};
 
-	const handleFlightOptionsChange = async (sel) => {
+	const handleFlightOptionsToggle = async (sel) => {
+		setIsLoading(true);
 		const updatedValues = { ...formValue };
 		updatedValues["sortBy"] = sel;
 		setFormValue(updatedValues);
 
-		const { date, returnDate, ...form } = updatedValues;
+		const { date, returnDate, travelType, ...form } = updatedValues;
 		const payload = {
 			...form,
 			date: dayjs(date).format("YYYY-MM-DD"),
-			...(returnDate && { returnDate: dayjs(date).format("YYYY-MM-DD") }),
+			...(travelType === "roundTrip" && {
+				returnDate: dayjs(returnDate).format("YYYY-MM-DD"),
+			}),
 			...passengers,
 		};
 
 		const res = await searchFlights(payload); // API call
-		setFlights(res?.data);
+		setTimeout(() => {
+			setFlights(res?.data);
+			setIsLoading(false);
+		}, [500]);
 	};
 
 	const handleSubmit = async () => {
+		const {
+			originEntityId,
+			destinationEntityId,
+			date,
+			returnDate,
+			travelType,
+			...form
+		} = formValue;
+		if (
+			travelType === "oneWay" &&
+			(!originEntityId.length || !destinationEntityId.length || !date)
+		) {
+			failureToast(
+				"Please fill out the missing fields to proceed with the flight search."
+			);
+			return;
+		}
+		if (
+			travelType === "roundTrip" &&
+			(!originEntityId.length ||
+				!destinationEntityId.length ||
+				!date ||
+				!returnDate)
+		) {
+			failureToast(
+				"Please fill out the missing fields to proceed with the flight search."
+			);
+			return;
+		}
 		setInitState(false);
 		setIsLoading(true);
-		const { date, returnDate, ...form } = formValue;
+		console.log("travel", travelType);
 		const payload = {
 			...form,
+			originEntityId,
+			destinationEntityId,
 			date: dayjs(date).format("YYYY-MM-DD"),
-			...(returnDate && { returnDate: dayjs(date).format("YYYY-MM-DD") }),
+			...(travelType === "roundTrip" && {
+				returnDate: dayjs(returnDate).format("YYYY-MM-DD"),
+			}),
 			...passengers,
 		};
 
@@ -116,7 +158,7 @@ const FlightHomePage = () => {
 		}, [500]);
 	};
 
-	console.log("loading", isLoading);
+	console.log("loading", formValue);
 
 	return (
 		<>
@@ -179,7 +221,10 @@ const FlightHomePage = () => {
 							onChangeInput={handleSearchAirports}
 						/>
 					</Box>
-					<DatePickers onChange={handleTravelDateChange} />
+					<DatePickers
+						onChange={handleTravelDateChange}
+						isOneWay={formValue.travelType === "oneWay"}
+					/>
 					<Box
 						sx={{
 							display: "flex",
@@ -188,13 +233,12 @@ const FlightHomePage = () => {
 							...(isSMScreen && { justifyContent: "space-between", width: "100%" }),
 						}}
 					>
-						<Box sx={{ display: "flex", gap: 2 }}>
+						<Box sx={{ display: "flex", gap: 2, justifyContent: "flex-start" }}>
 							<Select
-								value={cabinClass}
+								value={formValue.cabinClass}
 								onChange={(e) => {
 									const updatedForm = { ...formValue };
-									formValue["cabinClass"] = e.target.value;
-									setCabinClass(e.target.value);
+									updatedForm["cabinClass"] = e.target.value;
 									setFormValue(updatedForm);
 								}}
 								size="small"
@@ -202,9 +246,9 @@ const FlightHomePage = () => {
 									color: "white",
 									backgroundColor: "#424242",
 									borderRadius: 1,
-									fontSize: "18px",
-									width: "150px",
-									padding: "8px 10px",
+									fontSize: "16px",
+									width: "140px",
+									padding: "5px 8px",
 								}}
 							>
 								{CABIN_CLASS?.map((item) => (
@@ -214,11 +258,34 @@ const FlightHomePage = () => {
 								))}
 							</Select>
 							<AddPassengers onChange={setPassengers} />
+							<Select
+								value={formValue.travelType}
+								onChange={(e) => {
+									const updatedForm = { ...formValue };
+									updatedForm["travelType"] = e.target.value;
+									setFormValue(updatedForm);
+								}}
+								size="small"
+								sx={{
+									color: "white",
+									backgroundColor: "#424242",
+									borderRadius: 1,
+									fontSize: "16px",
+									width: "130px",
+									padding: "5px 8px",
+								}}
+							>
+								{TRAVEL_TYPE?.map((item) => (
+									<MenuItem key={item.value} value={item.value}>
+										{item.label}
+									</MenuItem>
+								))}
+							</Select>
 						</Box>
 						<Button
 							variant="contained"
 							color="primary"
-							sx={{ borderRadius: 1, padding: "14px 14px" }}
+							sx={{ borderRadius: 1, padding: "12px 14px", minWidth: "120px" }}
 							startIcon={<Search />}
 							onClick={handleSubmit}
 						>
@@ -226,13 +293,14 @@ const FlightHomePage = () => {
 						</Button>
 					</Box>
 				</Box>
-				{Boolean(Object.keys(flights)?.length) && (
-					<FlightOptionsToggle
-						onChange={(sel) => {
-							handleFlightOptionsChange(sel);
-						}}
-					/>
-				)}
+				{Boolean(Object.keys(flights)?.length) &&
+					flights?.context.status !== "failure" && (
+						<FlightOptionsToggle
+							onChange={(sel) => {
+								handleFlightOptionsToggle(sel);
+							}}
+						/>
+					)}
 			</Box>
 			<Box sx={{ padding: 4 }}>
 				{initState ? (
