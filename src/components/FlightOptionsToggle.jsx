@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { func } from "prop-types";
 
-const FlightOptionsToggle = () => {
+const FlightOptionsToggle = ({ onChange }) => {
 	const [selected, setSelected] = useState("best");
 
 	const handleChange = (event, newSelection) => {
-		if (newSelection !== null) {
-			setSelected(newSelection);
-		}
+		setSelected(newSelection);
+		onChange(newSelection);
 	};
 	return (
 		<Box sx={{ p: 2, borderRadius: "8px" }}>
@@ -40,7 +40,7 @@ const FlightOptionsToggle = () => {
 					Best
 				</ToggleButton>
 				<ToggleButton
-					value="cheapest"
+					value="price_low"
 					sx={{
 						flex: 1,
 						color: "#fff",
@@ -59,6 +59,10 @@ const FlightOptionsToggle = () => {
 			</ToggleButtonGroup>
 		</Box>
 	);
+};
+
+FlightOptionsToggle.propTypes = {
+	onChange: func.isRequired,
 };
 
 export default FlightOptionsToggle;
