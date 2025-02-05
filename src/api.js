@@ -1,3 +1,6 @@
+import { toast } from "react-toastify";
+import { failureToast } from "./utils";
+
 // Base URL for the API
 const API_URL = "https://sky-scrapper.p.rapidapi.com";
 
@@ -24,7 +27,7 @@ export const searchAirports = async (query) => {
 		const data = await response.json();
 		return data;
 	} catch (error) {
-		console.error("Error fetching airports:", error);
+		failureToast(error);
 		return null;
 	}
 };
@@ -33,7 +36,11 @@ export const searchAirports = async (query) => {
 export const getNearbyAirports = async (lat, lng) => {
 	try {
 		const response = await fetch(
-			`${API_URL}/api/v1/flights/getNearByAirports?lat=${lat}&lng=${lng}`
+			`${API_URL}/api/v1/flights/getNearByAirports?lat=${lat}&lng=${lng}`,
+			{
+				method: "GET",
+				headers: headers,
+			}
 		);
 		if (!response.ok) {
 			throw new Error("Failed to fetch nearby airports");
@@ -41,16 +48,19 @@ export const getNearbyAirports = async (lat, lng) => {
 		const data = await response.json().data;
 		return data;
 	} catch (error) {
-		console.error("Error fetching nearby airports:", error);
 		return null;
 	}
 };
 
 // Search for flights based on origin and destination
-export const searchFlights = async (originSkyId, destinationSkyId, date) => {
+export const searchFlights = async (params) => {
 	try {
 		const response = await fetch(
-			`${API_URL}/api/v1/flights/searchFlights?originSkyId=${originSkyId}&destinationSkyId=${destinationSkyId}&date=${date}`
+			`${API_URL}/api/v1/flights/searchFlights?${new URLSearchParams(params)}`,
+			{
+				method: "GET",
+				headers: headers,
+			}
 		);
 		if (!response.ok) {
 			throw new Error("Failed to fetch flights");
@@ -58,7 +68,7 @@ export const searchFlights = async (originSkyId, destinationSkyId, date) => {
 		const data = await response.json();
 		return data;
 	} catch (error) {
-		console.error("Error fetching flights:", error);
+		failureToast(`Error fetching flights ${error}`);
 		return null;
 	}
 };
